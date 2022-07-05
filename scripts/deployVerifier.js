@@ -2,12 +2,12 @@ const hre = require("hardhat");
 
 async function main() {
 
-  const Verifier = await hre.ethers.getContractFactory("ProofVerifier");
-  const verifier = await Verifier.deploy();
+  const Prover = await hre.ethers.getContractFactory("Prover");
+  const prover = await Prover.deploy();
 
-  await verifier.deployed();
+  await prover.deployed();
 
-  console.log("Verifier deployed to:", verifier.address);
+  console.log("Prover deployed to:", prover.address);
 }
 
 main()

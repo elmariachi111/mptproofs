@@ -3,6 +3,7 @@ dotenv.config();
 const { ethers } = require('ethers');
 const { toBuffer, bufferToHex, keccak256, rlp } = require('ethereumjs-util');
 const { SecureTrie } = require('merkle-patricia-tree');
+const { GetProof } = require('eth-proof');
 
 const Web3 = require("web3");
 
@@ -24,6 +25,7 @@ async function validateStorage(proof) {
   //prove Mike Tyson
   const contract = "0x1a92f7381b9f03921564a437210bb9396471050c"; //cool cats
   const blockNumber = 12790738;
+  const blockHash = "0x0e7bd33de43c7380dd2e87f5aa51f80ff575c715c72f130b7c020e6d2f72853a"
   const slot = web3.utils.soliditySha3({ type: "uint256", value: 2724 }, { type: "uint256", value: 2 })
 
   // Splice Price
@@ -47,8 +49,12 @@ async function validateStorage(proof) {
   //https://github.com/lidofinance/curve-merkle-oracle/blob/fffd375659358af54a6e8bbf8c3aa44188894c81/offchain/generate_steth_price_proof.py#L61
   const proof_blob = rlp.encode(rlpDecodedStorageProofs);
 
-  console.log(bufferToHex(proof_blob));
+  //console.log(bufferToHex(proof_blob));
   console.log(await validateStorage(proof));
 
+  const gp = new GetProof(`https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`)
+  const gpProof = await gp.storageProof(contract, slot, blockHash);
+
+  console.log("gp", bufferToHex(gpProof.storageProof.toHex()));
 
 })();
