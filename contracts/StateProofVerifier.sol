@@ -87,7 +87,7 @@ library StateProofVerifier {
         bytes32 _addressHash, // keccak256(abi.encodePacked(address))
         bytes32 _stateRootHash,
         RLPReader.RLPItem[] memory _proof
-    ) internal pure returns (Account memory) {
+    ) internal view returns (Account memory) {
         bytes memory acctRlpBytes = MerklePatriciaProofVerifier
             .extractProofValue(
                 _stateRootHash,
@@ -125,7 +125,7 @@ library StateProofVerifier {
         bytes32 _slotHash,
         bytes32 _storageRootHash,
         RLPReader.RLPItem[] memory _proof
-    ) internal pure returns (SlotValue memory) {
+    ) internal view returns (SlotValue memory) {
         bytes memory valueRlpBytes = MerklePatriciaProofVerifier
             .extractProofValue(
                 _storageRootHash,

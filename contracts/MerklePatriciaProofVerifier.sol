@@ -7,6 +7,7 @@
 pragma solidity 0.6.12;
 
 import {RLPReader} from "solidity-rlp/contracts/RLPReader.sol";
+import "hardhat/console.sol";
 
 library MerklePatriciaProofVerifier {
     using RLPReader for RLPReader.RLPItem;
@@ -28,7 +29,7 @@ library MerklePatriciaProofVerifier {
         bytes32 rootHash,
         bytes memory path,
         RLPReader.RLPItem[] memory stack
-    ) internal pure returns (bytes memory value) {
+    ) internal view returns (bytes memory value) {
         bytes memory mptKey = _decodeNibbles(path, 0);
         uint256 mptKeyOffset = 0;
 
@@ -51,7 +52,7 @@ library MerklePatriciaProofVerifier {
             // We use the fact that an rlp encoded list consists of some
             // encoding of its length plus the concatenation of its
             // *rlp-encoded* items.
-
+            console.logUint(stack[i].len);
             // The root node is hashed with Keccak-256 ...
             if (i == 0 && rootHash != stack[i].rlpBytesKeccak256()) {
                 revert();

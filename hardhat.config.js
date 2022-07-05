@@ -21,6 +21,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   networks: {
+    develop: {
+      url: "http://127.0.0.1:8545",
+    },
     sepolia: {
       url: "http://127.0.0.1:6545",
       chainId: 11155111,
