@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  geth:
+    image: ethereum/client-go:latest
+    ports:
+      - 30303:30303
+      - 6545:8545
+    volumes:
+      - ./root:/root
+      - ./sepolia.toml:/root/config/sepolia.toml
+    command: "--sepolia --syncmode full --http --http.addr 0.0.0.0 --http.api eth,net,web3,debug,txpool,miner --gcmode archive --cache.preimages --graphql  --http.vhosts '*' --http.corsdomain '*' --mine --miner.etherbase '0xe4A24d8aB17Ea7b3A53772e87c8f609EA7F91F2A' --config /root/config/sepolia.toml"
+
+#1383560
+#1384827
+#1384929
+  
+#--mine --miner.etherbase '0xe4A24d8aB17Ea7b3A53772e87c8f609EA7F91F2A'
