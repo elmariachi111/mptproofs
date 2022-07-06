@@ -12,7 +12,7 @@ Light Ethereum clients cannot verify the current chain's state since they're not
 
 Merkle trees use hashes of their nodes' values as keys to guarantee their content integrity. To build a simple binary Merkle tree, a prover starts by computing a hash over a node `L`'s content `h(L)`. Next, they compute the hash over `h(L)` and the hash of a sibling content node `K`: `h(h(K)+h(L))`. Using this hash as a key they create a new node `KL` with `h(K)` and `h(L)` as children and find another node `IJ` at the same tree level to create a new parent node that hashes all values of the underlying tree structure: `h(IJ + KL)` = `h(h(h(I) + h(J)) + h(h(K) + h(L)))`. This process is repeated until all nodes are combined to a single root hash. Since each parent node keeps a hash of its children, it's impossible to change anything down the tree without affecting the tree's root node.
 
-![](/home/stadolf/.var/app/com.github.marktext.marktext/config/marktext/images/2022-07-04-18-22-34-image.png)
+![](./img/2022-07-04-18-22-34-image.png)
 
 To prove that a certain base value has been incorporated into a Merkle tree's root, one collects the hashes of sibling nodes at each level of the tree. A prover successively computes their hash sums to finally recreate the root hash, thereby proving the inclusion of the node's value.
 
