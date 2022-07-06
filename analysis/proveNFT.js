@@ -19,7 +19,7 @@ async function validateStorage(proof, slot) {
 
   const rlpNode = await pTrie.get(toBuffer(slot));
   const node = rlp.decode(rlpNode);
-  console.log("content at slot", ethers.BigNumber.from(node).toHexString());
+  console.log("content at slot", slot, ethers.BigNumber.from(node).toHexString());
   return valid
 }
 

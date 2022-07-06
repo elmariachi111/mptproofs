@@ -20,10 +20,6 @@ const slot = "0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563
 //const storageHash = "0x4c0cad4696e5b0ca33f7757d9dfa601a07e65f3ff49da21a03f9cb1fb6fd9218";
 
 
-async function proveStorage() {
-
-}
-
 async function main() {
   const Verifier = await ethers.getContractFactory("ProofVerifier");
   const verifier = Verifier.attach(process.env.CONTRACT_VERIFIER);
