@@ -2,7 +2,6 @@ pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "./RLPDecode.sol";
-import "hardhat/console.sol";
 
 /*
     Documentation:
@@ -25,7 +24,7 @@ library MPT {
 
     function verifyTrieProof(MerkleProof memory data)
         internal
-        view
+        pure
         returns (bool)
     {
         bytes memory node = data.proof[data.proofIndex];
@@ -47,8 +46,6 @@ library MPT {
         }
 
         uint256 numberItems = RLPDecode.numItems(dec.item);
-        console.log(numberItems);
-
         // branch
         if (numberItems == 17) {
             return verifyTrieProofBranch(data);
@@ -64,11 +61,10 @@ library MPT {
 
     function verifyTrieProofBranch(MerkleProof memory data)
         internal
-        view
+        pure
         returns (bool)
     {
         bytes memory node = data.proof[data.proofIndex];
-        console.log(data.keyIndex);
         if (data.keyIndex >= data.key.length) {
             bytes memory item = RLPDecode
             .toRlpItem(node)
@@ -97,7 +93,7 @@ library MPT {
     function verifyTrieProofLeafOrExtension(
         RLPDecode.Iterator memory dec,
         MerkleProof memory data
-    ) internal view returns (bool) {
+    ) internal pure returns (bool) {
         bytes memory nodekey = dec.next().toBytes();
         bytes memory nodevalue = dec.next().toBytes();
         uint256 prefix;
@@ -195,7 +191,7 @@ library MPT {
         else return false;
     }
 
-    function b2b32(bytes memory data) internal view returns (bytes32 part) {
+    function b2b32(bytes memory data) internal pure returns (bytes32 part) {
         assembly {
             part := mload(add(data, 32))
         }
@@ -206,7 +202,7 @@ library MPT {
         uint256 start,
         uint256 length,
         bool removeFirstNibble
-    ) internal view returns (bytes memory) {
+    ) internal pure returns (bytes memory) {
         uint256 slots = length / 32;
         uint256 rest = (length % 32) * 8;
         uint256 pos = 32;
@@ -242,7 +238,7 @@ library MPT {
 
     function getNibbles(bytes1 b)
         internal
-        view
+        pure
         returns (bytes1 nibble1, bytes1 nibble2)
     {
         assembly {
@@ -253,7 +249,7 @@ library MPT {
 
     function expandKeyEven(bytes memory data)
         internal
-        view
+        pure
         returns (bytes memory)
     {
         uint256 length = data.length * 2;
@@ -269,7 +265,7 @@ library MPT {
 
     function expandKeyOdd(bytes memory data)
         internal
-        view
+        pure
         returns (bytes memory)
     {
         uint256 length = data.length * 2 - 1;
