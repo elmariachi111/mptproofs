@@ -12,10 +12,14 @@ const { rlpEncodeProof } = require('./libRlp');
 //const web3 = new Web3("http://127.0.0.1:6545");
 const web3 = new Web3(`https://mainnet.infura.io/v3/${process.env.INFURA_KEY}`);
 
-async function validateStorage(proof) {
+async function validateStorage(proof, slot) {
   const proofBufs = proof.storageProof[0].proof.map(toBuffer);
   const pTrie = await SecureTrie.fromProof(proofBufs);
   const valid = await pTrie.checkRoot(toBuffer(proof.storageHash));
+
+  const rlpNode = await pTrie.get(toBuffer(slot));
+  const node = rlp.decode(rlpNode);
+  console.log("content at slot", ethers.BigNumber.from(node).toHexString());
   return valid
 }
 
@@ -63,7 +67,7 @@ const getNFTProof = async (blockNumber, contract, slot) => {
   console.log("account: ", bufferToHex(accountProof))
   console.log("storage:", bufferToHex(storageProof));
 
-  console.log(await validateStorage(proof));
+  console.log(await validateStorage(proof, web3.utils.keccak256(slot)));
 
 })();
 
