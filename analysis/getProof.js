@@ -6,6 +6,7 @@ const { toBuffer, bufferToHex, keccak256, rlp } = require('ethereumjs-util');
 const { SecureTrie } = require('merkle-patricia-tree');
 
 const Web3 = require("web3");
+const { rlpEncodeProof } = require('./libRlp');
 
 
 //const db = new Level('./root/.ethereum/sepolia/geth/chaindata')
@@ -104,30 +105,40 @@ const proveLongString = async (blockNumber) => {
 
 }
 
-// const proveContractStorage = async (blockNumber) => {
-//   const proof = await web3.eth.getProof(
-//     process.env.CONTRACT_GREETER,
-//     [0], //the wanted storage slot
-//     blockNumber
-//   );
-//   console.log(proof.storageProof);
+const getGreeterProof = async (blockNumber) => {
+  const proof = await web3.eth.getProof(
+    process.env.CONTRACT_GREETER,
+    [0], //the wanted storage slot
+    blockNumber
+  );
 
-//   const value = web3.utils.hexToAscii(proof.storageProof[0].value);
-//   console.log(value);
+  const value = web3.utils.hexToAscii(proof.storageProof[0].value);
+  console.log(value);
 
-//   const proofBufs = proof.storageProof[0].proof.map(toBuffer);
-//   const proofTrie = await SecureTrie.fromProof(proofBufs);
-//   //const valid = await pTrie.checkRoot(toBuffer(proof.storageHash));
-//   const valid = bufferToHex(proofTrie.root) == proof.storageHash;
-//   console.log(valid)
-// }
+  const proofBufs = proof.storageProof[0].proof.map(toBuffer);
+  const proofTrie = await SecureTrie.fromProof(proofBufs);
+  //const valid = await pTrie.checkRoot(toBuffer(proof.storageHash));
+  const valid = bufferToHex(proofTrie.root) == proof.storageHash;
+  console.log(valid)
+
+  return { proof }
+}
 
 (async () => {
-  // const slot = web3.utils.soliditySha3({ type: "uint256", value: 0 })
-  // console.log(slot);
+  const slot = web3.utils.soliditySha3({ type: "uint256", value: 0 })
+  console.log(slot);
 
   const blockNumber = 1391140;
-  const { proof } = await getProof(blockNumber);
-  console.log(proof.storageHash, proof.storageProof);
+  //const { proof } = await getProof(blockNumber);
+  const block = await web3.eth.getBlock(blockNumber);
+  console.log(block);
+  const { proof } = await getGreeterProof(blockNumber);
+  console.log(proof, proof.storageProof);
+
+  const accountProof = rlpEncodeProof(proof.accountProof);
+  const storageProof = rlpEncodeProof(proof.storageProof[0].proof);
+  console.log("account: ", bufferToHex(accountProof))
+  console.log("storage:", bufferToHex(storageProof));
+
   //await proveLongString(1414904);
 })();

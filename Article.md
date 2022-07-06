@@ -177,4 +177,4 @@ const proof = await web3.eth.getProof(
   );
 ```
 
-Proofs can not only be used on the client's side. It's perfectly possible to use them inside Solidity contracts as well, e.g. to react on historical data that's not available on chain. Lido Finance is using them 
+Proofs can not only be used on the client's side. It's perfectly possible to use them inside Solidity contracts to prove historical chain information that's not available on the prover's contract. A good example is Lido Finance'  is using them 
